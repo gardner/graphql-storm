@@ -5,7 +5,18 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: gardner
-      POSTGRES_PASSWORD: gardner
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  server:
+    build: ./server
+    restart: always
+    ports:
+      - "5000:5000/tcp"
+    environment:
+      PGURL: "postgresql://postgres:postgres@db:5432/postgres"
+    depends_on:
+      - db
+  
